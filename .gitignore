@@ -22,3 +22,20 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
+# OS specific (MacOS)
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE specific (VS Code / IntelliJ)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testing
+/coverage
