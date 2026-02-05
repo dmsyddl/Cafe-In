@@ -27,7 +27,6 @@ export class AppService {
             })
         )
 
-        // const cafeJson = {};
         const cafeName = response.data.items[0].title;
         const cafeAddress = response.data.items[0].address;
 
