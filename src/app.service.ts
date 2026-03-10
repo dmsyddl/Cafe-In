@@ -2,12 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Cafe } from './cafe/cafe.entity';
 
 @Injectable()
 export class AppService {
     constructor(
         private readonly httpService: HttpService,
         private readonly configService: ConfigService,
+        
+        @InjectRepository(Cafe)
+        private cafeRepository: Repository<Cafe>
     ) {}
 
     async cafeSearch(keyword: string) {
@@ -25,7 +31,24 @@ export class AppService {
                 }
             })
         )
+        
+        let cafes = [];
+        if (response.data.items.length > 0) {
+            cafes = response.data.items.map((item) => ({
+                title: item.title.replace(/<[^>]*>/g, ''),
+                link: item.link,
+                description: item.description,
+                address: item.address,
+                roadAddress: item.roadAddress,
+                mapx: item.mapx,
+                mapy: item.mapy,
+            }))
+            await this.cafeRepository.save(cafes);
+            console.log('검색어 저장 성공');
+        } else {
+            console.log('검색어 조회 실패');
+        }
 
-        return response.data;
+        
     }
 }
