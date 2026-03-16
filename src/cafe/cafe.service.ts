@@ -10,6 +10,10 @@ export class CafeService {
         private cafeRepository: Repository<Cafe>,
     ) {}
 
+    async findAll(): Promise<Cafe[]> {
+        return this.cafeRepository.find();
+    }
+
     async saveCafes(items: Partial<Cafe>[]): Promise<void> {
         const cafes = items.map((item) => ({
             title: (item.title ?? '').replace(/<[^>]*>/g, ''),
