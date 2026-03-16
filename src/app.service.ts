@@ -32,9 +32,9 @@ export class AppService {
             })
         )
         
-        let cafes = [];
+        let cafes: Partial<Cafe>[] = [];
         if (response.data.items.length > 0) {
-            cafes = response.data.items.map((item) => ({
+            cafes = response.data.items.map((item: Cafe) => ({
                 title: item.title.replace(/<[^>]*>/g, ''),
                 link: item.link,
                 description: item.description,
@@ -43,12 +43,16 @@ export class AppService {
                 mapx: item.mapx,
                 mapy: item.mapy,
             }))
-            await this.cafeRepository.save(cafes);
-            console.log('검색어 저장 성공');
+            await this.cafeRepository.upsert(cafes, {
+                conflictPaths: ['address'],
+                skipUpdateIfNoValuesChanged: true, // 불필요한 DB업데이트를 막는다.
+            })
+            console.log('조회한 카페 저장 성공');
         } else {
-            console.log('검색어 조회 실패');
+            console.log('조회된 카페가 없음');
+            return false;
         }
 
-        
+        return true;
     }
 }
