@@ -1,10 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Cafe } from './cafe/cafe.entity';
 import { KeywordModule } from './keyword/keyword.module';
 import { CafeModule } from './cafe/cafe.module';
 
@@ -12,9 +8,8 @@ import { CafeModule } from './cafe/cafe.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env', 
+      envFilePath: '.env',
     }),
-    HttpModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -29,13 +24,8 @@ import { CafeModule } from './cafe/cafe.module';
         synchronize: true,
       })
     }),
-    TypeOrmModule.forFeature(
-      [Cafe]
-    ),
     KeywordModule,
-    CafeModule
+    CafeModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

@@ -1,12 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller } from '@nestjs/common';
 
-@Controller('cafes')
-export class AppController {
-  constructor(private readonly appService: AppService) {}
-  
-  @Get()
-  async getCafeInfo(@Query('name') name: string) {
-    return await this.appService.cafeSearch(name);
-  }
-}
+@Controller()
+export class AppController {}

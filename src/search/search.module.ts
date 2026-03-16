@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import { SearchService } from './search.service';
-import { SearchController } from './search.controller';
 import { HttpModule } from '@nestjs/axios';
+import { SearchService } from './search.service';
+import { CafeModule } from '../cafe/cafe.module';
 
 @Module({
-  imports: [
-    HttpModule,
-  ],
+  imports: [HttpModule, CafeModule],
   providers: [SearchService],
-  controllers: [SearchController]
+  exports: [SearchService],
 })
 export class SearchModule {}
