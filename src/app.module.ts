@@ -5,6 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cafe } from './cafe/cafe.entity';
+import { KeywordModule } from './keyword/keyword.module';
+import { CafeModule } from './cafe/cafe.module';
 
 @Module({
   imports: [
@@ -29,7 +31,9 @@ import { Cafe } from './cafe/cafe.entity';
     }),
     TypeOrmModule.forFeature(
       [Cafe]
-    )
+    ),
+    KeywordModule,
+    CafeModule
   ],
   controllers: [AppController],
   providers: [AppService],
