@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cafe } from './cafe.entity';
 
 @Injectable()
-export class CafeService {
+export class CafeService implements OnModuleInit {
     constructor(
         @InjectRepository(Cafe)
         private cafeRepository: Repository<Cafe>,
     ) {}
+
+    async onModuleInit() {
+        const cafes = await this.cafeRepository.find();
+    }
 
     async findAll(): Promise<Cafe[]> {
         return this.cafeRepository.find();
