@@ -14,7 +14,7 @@ export class Keyword {
     @CreateDateColumn()
     createAt: Date;
 
-    @ManyToMany(() => Cafe)
+    @ManyToMany(() => Cafe, (cafe) => cafe.keywords)
     @JoinTable()
     cafes: Cafe[];
 }

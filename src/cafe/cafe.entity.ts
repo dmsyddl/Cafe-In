@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Keyword } from 'src/keyword/keyword.entity';
 
 @Entity()
 export class Cafe {
@@ -26,4 +27,7 @@ export class Cafe {
 
   @Column()
   mapy: string;
+
+  @ManyToMany(() => Keyword, (keyword) => keyword.cafes)
+  keywords: Keyword[];
 }

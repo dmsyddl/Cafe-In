@@ -4,19 +4,23 @@ function CafeCard({ cafe }) {
   return (
     <div className="cafe-card">
       <h2>{cafe.title}</h2>
-      {cafe.description && (
-        <p className="description">{cafe.description}</p>
+      <p className="address">{cafe.address}</p>
+      {cafe.keywords && cafe.keywords.length > 0 && (
+        <div className="tags">
+          {cafe.keywords.slice(0, 3).map((kw) => (
+            <span key={kw.id} className="tag">{kw.name}</span>
+          ))}
+          {cafe.keywords.length > 3 && (
+            <span className="tag tag-more">+{cafe.keywords.length - 3}</span>
+          )}
+        </div>
       )}
-      <div className="info">
-        <p><span>주소</span>{cafe.address}</p>
-        {cafe.roadAddress && (
-          <p><span>도로명</span>{cafe.roadAddress}</p>
-        )}
-      </div>
       {cafe.link && (
-        <a href={cafe.link} target="_blank" rel="noreferrer">
-          상세보기
-        </a>
+        <div className="card-footer">
+          <a href={cafe.link} target="_blank" rel="noreferrer">
+            상세보기
+          </a>
+        </div>
       )}
     </div>
   )

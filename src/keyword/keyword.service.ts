@@ -38,7 +38,7 @@ export class KeywordService {
         return cafes;
     }
 
-    async searchKeyword(id: number) : Promise<Cafe[]> {
+    async searchCafe(id: number) : Promise<Cafe[]> {
         const keyword = await this.keywordRepository.findOne({
             where: {id: id},
             relations: ['cafes']

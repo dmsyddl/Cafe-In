@@ -15,7 +15,7 @@ export class CafeService implements OnModuleInit {
     }
 
     async findAll(): Promise<Cafe[]> {
-        return this.cafeRepository.find();
+        return this.cafeRepository.find({relations: ['keywords']});
     }
 
     async saveCafes(items: Partial<Cafe>[]): Promise<Cafe[]> {
