@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Cafe } from './cafe.entity';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class CafeService implements OnModuleInit {
         return this.cafeRepository.find();
     }
 
-    async saveCafes(items: Partial<Cafe>[]): Promise<void> {
+    async saveCafes(items: Partial<Cafe>[]): Promise<Cafe[]> {
         const cafes = items.map((item) => ({
             title: (item.title ?? '').replace(/<[^>]*>/g, ''),
             link: item.link,
@@ -33,5 +33,8 @@ export class CafeService implements OnModuleInit {
             conflictPaths: ['address'],
             skipUpdateIfNoValuesChanged: true,
         });
+
+        const addresses = cafes.map((c) => c.address);
+        return this.cafeRepository.find({ where: { address: In(addresses) } });
     }
 }

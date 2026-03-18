@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Cafe } from "../cafe/cafe.entity";
 
 @Entity()
 export class Keyword {
@@ -13,6 +14,7 @@ export class Keyword {
     @CreateDateColumn()
     createAt: Date;
 
-    @UpdateDateColumn()
-    updateAt: Date;
+    @ManyToMany(() => Cafe)
+    @JoinTable()
+    cafes: Cafe[];
 }

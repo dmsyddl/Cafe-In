@@ -1,24 +1,56 @@
 import { useState, useEffect } from 'react'
+import SearchBar from './components/SearchBar'
+import KeywordTags from './components/KeywordTags'
+import CafeList from './components/CafeList'
 import './App.css'
 
 const API_URL = 'http://localhost:3050'
 
 function App() {
   const [cafes, setCafes] = useState([])
+  const [keywords, setKeywords] = useState([])
+  const [selectedKeyword, setSelectedKeyword] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(`${API_URL}/cafes`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCafes(data)
+    Promise.all([
+      fetch(`${API_URL}/keywords`).then((res) => res.json()),
+      fetch(`${API_URL}/cafes`).then((res) => res.json()),
+    ])
+      .then(([keywordsData, cafesData]) => {
+        setKeywords(keywordsData)
+        setCafes(cafesData)
         setLoading(false)
       })
       .catch((err) => {
-        console.error('카페 정보 조회 실패:', err)
+        console.error('데이터 조회 실패:', err)
         setLoading(false)
       })
   }, [])
+
+  const handleKeywordSelect = (keyword) => {
+    setSelectedKeyword(keyword)
+
+    if (keyword === null) {
+      fetch(`${API_URL}/cafes`)
+        .then((res) => res.json())
+        .then((data) => setCafes(data))
+        .catch((err) => console.error('전체 카페 조회 실패:', err))
+    } else {
+      fetch(`${API_URL}/keywords/${keyword.id}/cafes`)
+        .then((res) => res.json())
+        .then((data) => setCafes(data))
+        .catch((err) => console.error('키워드 카페 조회 실패:', err))
+    }
+  }
+
+  const handleSearchComplete = ({ keyword, cafes, isNew }) => {
+    if (isNew) {
+      setKeywords((prev) => [...prev, keyword])
+    }
+    setSelectedKeyword(keyword)
+    setCafes(cafes)
+  }
 
   if (loading) {
     return <div className="loading">로딩 중...</div>
@@ -27,33 +59,13 @@ function App() {
   return (
     <div className="container">
       <h1>Cafe-In</h1>
-      <p className="subtitle">저장된 카페 {cafes.length}개</p>
-
-      {cafes.length === 0 ? (
-        <p className="empty">저장된 카페가 없습니다.</p>
-      ) : (
-        <div className="cafe-grid">
-          {cafes.map((cafe) => (
-            <div key={cafe.id} className="cafe-card">
-              <h2>{cafe.title}</h2>
-              {cafe.description && (
-                <p className="description">{cafe.description}</p>
-              )}
-              <div className="info">
-                <p><span>주소</span>{cafe.address}</p>
-                {cafe.roadAddress && (
-                  <p><span>도로명</span>{cafe.roadAddress}</p>
-                )}
-              </div>
-              {cafe.link && (
-                <a href={cafe.link} target="_blank" rel="noreferrer">
-                  상세보기
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      <SearchBar keywords={keywords} onSearchComplete={handleSearchComplete} />
+      <KeywordTags
+        keywords={keywords}
+        selectedKeyword={selectedKeyword}
+        onSelect={handleKeywordSelect}
+      />
+      <CafeList cafes={cafes} selectedKeyword={selectedKeyword} />
     </div>
   )
 }

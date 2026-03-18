@@ -24,4 +24,9 @@ export class KeywordController {
     async search(@Param('id') id: number) {
         return this.keywordService.search(id);
     }
+
+    @Get(':id/cafes')
+    async searchKeyword(@Param('id') id: number) {
+        return this.keywordService.searchKeyword(id);
+    }
 }

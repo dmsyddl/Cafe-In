@@ -12,7 +12,7 @@ export class SearchService {
         private readonly cafeService: CafeService,
     ) {}
 
-    async searchAndSave(keyword: string): Promise<boolean> {
+    async searchAndSave(keyword: string): Promise<any[]> {
         const NAVER_API_URL = this.configService.get<string>('NAVER_API_URL');
         const NAVER_CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
         const NAVER_SECRET_ID = this.configService.get<string>('NAVER_SECRET_ID');
@@ -30,11 +30,10 @@ export class SearchService {
 
         if (response.data.items.length === 0) {
             console.log('조회된 카페가 없음');
-            return false;
+            return [];
         }
 
-        await this.cafeService.saveCafes(response.data.items);
-        console.log('조회한 카페 저장 성공');
-        return true;
+        const cafes = await this.cafeService.saveCafes(response.data.items);
+        return cafes;
     }
 }

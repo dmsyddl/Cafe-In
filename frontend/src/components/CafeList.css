@@ -1,0 +1,17 @@
+.subtitle {
+  color: #888;
+  margin-bottom: 32px;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  margin-top: 60px;
+  font-size: 1.1rem;
+}
+
+.cafe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}

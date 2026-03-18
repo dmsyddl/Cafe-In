@@ -1,0 +1,28 @@
+.keyword-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.keyword-tag {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #555;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.keyword-tag:hover {
+  border-color: #4a90d9;
+  color: #4a90d9;
+}
+
+.keyword-tag.active {
+  background: #4a90d9;
+  border-color: #4a90d9;
+  color: #fff;
+}

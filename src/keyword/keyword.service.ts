@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Keyword } from './keyword.entity';
+import { Cafe } from '../cafe/cafe.entity';
 import { SearchService } from '../search/search.service';
 
 @Injectable()
@@ -25,11 +26,28 @@ export class KeywordService {
         await this.keywordRepository.delete(id);
     }
 
-    async search(id: number): Promise<boolean> {
+    async search(id: number): Promise<Cafe[]> {
         const keyword = await this.keywordRepository.findOneBy({ id });
         if (!keyword) {
             throw new Error(`키워드(id: ${id})를 찾을 수 없습니다.`);
         }
-        return this.searchService.searchAndSave(keyword.name);
+        const cafes = await this.searchService.searchAndSave(keyword.name);
+        keyword.cafes = cafes;
+        await this.keywordRepository.save(keyword);
+        
+        return cafes;
+    }
+
+    async searchKeyword(id: number) : Promise<Cafe[]> {
+        const keyword = await this.keywordRepository.findOne({
+            where: {id: id},
+            relations: ['cafes']
+        });
+
+        if (!keyword) {
+            throw new Error(`키워드(id: ${id})를 찾을 수 없습니다.`);
+        }
+
+        return keyword.cafes;
     }
 }
