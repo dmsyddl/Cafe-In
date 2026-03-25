@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { KeywordService } from './keyword.service';
+import { CreateKeywordDto } from "./dto/create-keyword.dto"
 
 @Controller('keywords')
 export class KeywordController {
     constructor(private readonly keywordService: KeywordService) {}
 
     @Post()
-    async create(@Body('name') name: string) {
-        return this.keywordService.create(name);
+    async create(@Body('name') dto: CreateKeywordDto) {
+        return this.keywordService.create(dto.name);
     }
 
     @Get()
